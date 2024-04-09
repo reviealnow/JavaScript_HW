@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HW6</title>
+    <script src="/HW6/taiwan_districts.js"></script>
+  </head>
+
+  <body>
+    <header class="flex"></header>
+
+    <h1>HW6</h1>
+    <div style="text-align: center">
+        <h2 style="text-align: center;">台灣行政區郵遞區號</h2>
+    
+        <table style='display: inline-block;vertical-align: top;' border="1" id="tab">
+        </table>
+        <label for="city">地址：</label><select name="city" id="city"></select>
+        <select name="districts" id="districts"></select>
+    </div>
+
+    <script>
+      //   地址
+      let d = document.getElementById("city");
+      let z = document.getElementById("districts");
+      let len = data.length;
+      let result = "";
+      for (let i = 0; i < len; i++) {
+        let dis = `<option value="${i}">${data[i]["name"]}</option>`;
+        if (result == "") result += dis;
+        else result += "\n" + dis;
+      }
+      d.innerHTML = result;
+      showZip();
+      document.getElementById("city").addEventListener("change", showZip);
+
+      function showZip() {
+        let answer = "";
+        let val = parseInt(document.getElementById("city").value);
+        let length = data[val]["districts"].length;
+        console.log(length);
+        for (let j = 0; j < length; j++) {
+          let ans = `<option value="${j}">${data[val]["districts"][j]["zip"]}&nbsp${data[val]["districts"][j]["name"]}</option>`;
+          if (answer == "") answer += ans;
+          else answer += "\n" + ans;
+        }
+        z.innerHTML = answer;
+      }
+
+      // 郵遞區號
+      result = "";
+      for (city = 0; city < data.length; city++) {
+        let len = data[city]["districts"].length;
+        let dis = data[city]["name"];
+        for (r = 0; r < len; r++) {
+          let zip = data[city]["districts"][r]["zip"];
+          let name = data[city]["districts"][r]["name"];
+          if (r == 0) {
+            result += `<tr> <td rowspan=${len}>${dis}</td>`;
+            result += `\n <td>${zip}</td>`;
+            result += `\n <td>${name}</td>`;
+          } else {
+            result += `\n <tr> <td>${zip}</td> <td>${name}</td> </tr>`;
+          }
+        }
+      }
+      let end = document.getElementById("tab");
+      end.innerHTML = result;
+    </script>
+  </body>
+</html>
